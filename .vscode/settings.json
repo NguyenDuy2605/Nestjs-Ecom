@@ -1,0 +1,6 @@
+{
+    "terminal.integrated.persistentSession.enabled": true,
+    "terminal.integrated.persistentSession.revived": "onExit",
+    "terminal.integrated.persistentSession.scrollback": 10000,
+    "terminal.integrated.hideOnStartup": "never"
+}
