@@ -85,10 +85,11 @@ import pino from 'pino'
       connection: {
         // host: 'localhost',
         // port: 6379,
-        host: 'redis-18421.c1.ap-southeast-1-1.ec2.redns.redis-cloud.com',
-        port: 18421,
-        username: 'default',
-        password: 'LQKps0oHwkjyn5pSrKVcozNbuIiNTtDb',
+        // host: 'redis-18421.c1.ap-southeast-1-1.ec2.redns.redis-cloud.com',
+        // port: 18421,
+        // username: 'default',
+        // password: 'LQKps0oHwkjyn5pSrKVcozNbuIiNTtDb',
+        url: envConfig.REDIS_URL
       },
     }),
     I18nModule.forRoot({
@@ -150,7 +151,7 @@ import pino from 'pino'
     //   provide: APP_GUARD,
     //   useClass: ThrottlerBehindProxyGuard,
     // },
-    //PaymentConsumer,
+    PaymentConsumer,
     //RemoveRefreshTokenCronjob,
   ],
 })
