@@ -75,12 +75,22 @@ import pino from 'pino'
     //     }
     //   },
     // }),
-    // ScheduleModule.forRoot(),
+    ScheduleModule.forRoot(),
     // BullModule.forRoot({
     //   connection: {
     //     url: envConfig.REDIS_URL,
     //   },
     // }),
+    BullModule.forRoot({
+      connection: {
+        // host: 'localhost',
+        // port: 6379,
+        host: 'redis-18421.c1.ap-southeast-1-1.ec2.redns.redis-cloud.com',
+        port: 18421,
+        username: 'default',
+        password: 'LQKps0oHwkjyn5pSrKVcozNbuIiNTtDb',
+      },
+    }),
     I18nModule.forRoot({
       fallbackLanguage: 'en',
       loaderOptions: {
