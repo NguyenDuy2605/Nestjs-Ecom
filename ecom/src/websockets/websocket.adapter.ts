@@ -7,6 +7,7 @@ import { TokenService } from 'src/shared/services/token.service'
 import { createAdapter } from '@socket.io/redis-adapter'
 import { createClient } from 'redis'
 import envConfig from 'src/shared/config'
+import { Client } from 'socket.io/dist/client'
 
 const namespaces = ['/', 'payment', 'chat']
 export class WebsocketAdapter extends IoAdapter {
@@ -19,15 +20,6 @@ export class WebsocketAdapter extends IoAdapter {
     this.tokenService = app.get(TokenService)
   }
 
-  async connectToRedis(): Promise<void> {
-    const pubClient = createClient({ url: envConfig.REDIS_URL })
-    const subClient = pubClient.duplicate()
-
-    await Promise.all([pubClient.connect(), subClient.connect()])
-
-    this.adapterConstructor = createAdapter(pubClient, subClient)
-  }
-
   createIOServer(port: number, options?: ServerOptions) {
     const server: Server = super.createIOServer(port, {
       ...options,
@@ -36,7 +28,6 @@ export class WebsocketAdapter extends IoAdapter {
         credentials: true,
       },
     })
-
     server.use((socket, next) => {
       this.authMiddleware(socket, next)
         .then(() => {})
@@ -50,11 +41,48 @@ export class WebsocketAdapter extends IoAdapter {
     // namespaces.forEach((item) => {
     //   server.of(item).use(authMiddleware)
     // })
-    // server.use(authMiddleware)
+    // server.use(authMiddleware) //Chỉ áp dụng cho main
     // server.of('payment').use(authMiddleware)
     // server.of('chat').use(authMiddleware)
     return server
   }
+  
+  async connectToRedis(): Promise<void> {
+    const pubClient = createClient({ url: envConfig.REDIS_URL })
+    const subClient = pubClient.duplicate()
+
+    await Promise.all([pubClient.connect(), subClient.connect()])
+
+    this.adapterConstructor = createAdapter(pubClient, subClient)
+  }
+
+  // createIOServer(port: number, options?: ServerOptions) {
+  //   const server: Server = super.createIOServer(port, {
+  //     ...options,
+  //     cors: {
+  //       origin: '*',
+  //       credentials: true,
+  //     },
+  //   })
+
+  //   server.use((socket, next) => {
+  //     this.authMiddleware(socket, next)
+  //       .then(() => {})
+  //       .catch(() => {})
+  //   })
+  //   server.of(/.*/).use((socket, next) => {
+  //     this.authMiddleware(socket, next)
+  //       .then(() => {})
+  //       .catch(() => {})
+  //   })
+  //   // namespaces.forEach((item) => {
+  //   //   server.of(item).use(authMiddleware)
+  //   // })
+  //   // server.use(authMiddleware)
+  //   // server.of('payment').use(authMiddleware)
+  //   // server.of('chat').use(authMiddleware)
+  //   return server
+  // }
 
   async authMiddleware(socket: Socket, next: (err?: any) => void) {
     const { authorization } = socket.handshake.headers

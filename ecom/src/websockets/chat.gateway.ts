@@ -11,6 +11,7 @@ export class ChatGateway {
     this.server.emit('receive-message', {
       data: `Hello ${data}`,
     })
-    return data
+    //console.log(data)
+    return data 
   }
 }

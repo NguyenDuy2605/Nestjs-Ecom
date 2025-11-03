@@ -15,7 +15,6 @@ async function bootstrap() {
   app.enableCors()
   app.use(helmet())
   // app.useGlobalInterceptors(new LoggingInterceptor())
-
   const config = new DocumentBuilder()
     .setTitle('Ecommerce API')
     .setDescription('The API for the ecommerce application')
@@ -43,3 +42,4 @@ async function bootstrap() {
   await app.listen(process.env.PORT ?? 3000)
 }
 bootstrap()
+

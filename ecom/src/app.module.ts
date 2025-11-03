@@ -76,11 +76,6 @@ import pino from 'pino'
     //   },
     // }),
     ScheduleModule.forRoot(),
-    // BullModule.forRoot({
-    //   connection: {
-    //     url: envConfig.REDIS_URL,
-    //   },
-    // }),
     BullModule.forRoot({
       connection: {
         // host: 'localhost',
@@ -101,21 +96,21 @@ import pino from 'pino'
       resolvers: [{ use: QueryResolver, options: ['lang'] }, AcceptLanguageResolver],
       typesOutputPath: path.resolve('src/generated/i18n.generated.ts'),
     }),
-    // ThrottlerModule.forRoot({
-    //   throttlers: [
-    //     {
-    //       name: 'short',
-    //       ttl: 60000, // 1 minute
-    //       limit: 5,
-    //     },
-    //     {
-    //       name: 'long',
-    //       ttl: 120000, // 2 minutes
-    //       limit: 7,
-    //     },
-    //   ],
-    // }),
-    //WebsocketModule,
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          name: 'short',
+          ttl: 60000, // 1 minute
+          limit: 5,
+        },
+        {
+          name: 'long',
+          ttl: 120000, // 2 minutes
+          limit: 7,
+        },
+      ],
+    }),
+    WebsocketModule,
     SharedModule,
     AuthModule,
     LanguageModule,
@@ -132,7 +127,7 @@ import pino from 'pino'
     ProductTranslationModule,
     CartModule,
     OrderModule,
-    //PaymentModule,
+    PaymentModule,
     //ReviewModule,
   ],
   controllers: [AppController],
@@ -147,10 +142,10 @@ import pino from 'pino'
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
     },
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: ThrottlerBehindProxyGuard,
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerBehindProxyGuard,
+    },
     PaymentConsumer,
     //RemoveRefreshTokenCronjob,
   ],
