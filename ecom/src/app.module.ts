@@ -128,7 +128,7 @@ import pino from 'pino'
     CartModule,
     OrderModule,
     PaymentModule,
-    //ReviewModule,
+    ReviewModule,
   ],
   controllers: [AppController],
   providers: [
