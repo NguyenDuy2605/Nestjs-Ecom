@@ -8,6 +8,7 @@ export class RemoveRefreshTokenCronjob {
   constructor(private prismaService: PrismaService) {}
 
   @Cron(CronExpression.EVERY_DAY_AT_1AM)
+  //@Cron(CronExpression.EVERY_SECOND)
   async handleCron() {
     const refreshTokens = await this.prismaService.refreshToken.deleteMany({
       where: {

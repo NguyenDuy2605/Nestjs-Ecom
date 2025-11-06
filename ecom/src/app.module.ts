@@ -40,41 +40,41 @@ import pino from 'pino'
 
 @Module({
   imports: [
-    // LoggerModule.forRoot({
-    //   pinoHttp: {
-    //     serializers: {
-    //       req(req: any) {
-    //         return {
-    //           method: req.method,
-    //           url: req.url,
-    //           query: req.query,
-    //           params: req.params,
-    //         }
-    //       },
-    //       res(res: any) {
-    //         return {
-    //           statusCode: res.statusCode,
-    //         }
-    //       },
-    //     },
-    //     stream: pino.destination({
-    //       dest: path.resolve('logs/app.log'),
-    //       sync: false, // Asynchronous logging
-    //       mkdir: true, // Create the directory if it doesn't exist
-    //     }),
-    //   },
-    // }),
-    CacheModule.register({
-      isGlobal: true,
+    LoggerModule.forRoot({
+      pinoHttp: {
+        serializers: {
+          req(req: any) {
+            return {
+              method: req.method,
+              url: req.url,
+              query: req.query,
+              params: req.params,
+            }
+          },
+          res(res: any) {
+            return {
+              statusCode: res.statusCode,
+            }
+          },
+        },
+        stream: pino.destination({
+          dest: path.resolve('logs/app.log'),
+          sync: false, // Asynchronous logging
+          mkdir: true, // Create the directory if it doesn't exist
+        }),
+      },
     }),
-    // CacheModule.registerAsync({
+    // CacheModule.register({
     //   isGlobal: true,
-    //   useFactory: () => {
-    //     return {
-    //       stores: [createKeyv(envConfig.REDIS_URL)],
-    //     }
-    //   },
     // }),
+    CacheModule.registerAsync({
+      isGlobal: true,
+      useFactory: () => {
+        return {
+          stores: [createKeyv(envConfig.REDIS_URL)],
+        }
+      },
+    }),
     ScheduleModule.forRoot(),
     BullModule.forRoot({
       connection: {
@@ -147,7 +147,7 @@ import pino from 'pino'
       useClass: ThrottlerBehindProxyGuard,
     },
     PaymentConsumer,
-    //RemoveRefreshTokenCronjob,
+    RemoveRefreshTokenCronjob,
   ],
 })
 export class AppModule {}
